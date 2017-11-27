@@ -19,7 +19,7 @@ def increase_pets_sold(pet_shop, number_of_pets_sold)
 end
 
 def stock_count(pet_shop)
-  pet_shop[:pets].length()
+  return pet_shop[:pets].length()
 end
 
 def pets_by_breed(pet_shop, pet_breed)
@@ -70,7 +70,17 @@ def customer_can_afford_pet(customer, new_pet)
 end
 
 def sell_pet_to_customer(pet_shop, pet, customer)
-  pet_shop_cash = pet_shop[:admin][:total_cash]
-  return pet_shop_cash + pet[:price]
-  return pet_shop[:admin][:pets_sold] += 1
+#if pet not found, immediately comes out of the function
+return if (pet == nil)
+#if the customer can't afford pet will return false and exit the fuction
+return if !(customer_can_afford_pet(customer, pet))
+#add pet to customer
+add_pet_to_customer(customer, pet)
+#add pet to pet shop pets sold total
+increase_pets_sold(pet_shop, 1)
+#remove pet from pets array
+remove_pet_by_name(pet_shop, pet[:name])
+#add pet price to pet shop total cash
+add_or_remove_cash(pet_shop, pet[:price])
+
 end
